@@ -1,18 +1,15 @@
 import numpy as np
 import pandas as pd
-import datetime
+import matplotlib.pyplot as plt
 
-reddit_data = pd.read_csv(r"data_sets\reddit_data.csv")
-del reddit_data["ups"]
-del reddit_data["author_flair_css_class"]
-del reddit_data["distinguished"]
-reddit_data["edited"] = np.where(reddit_data["edited"] > 0, True, False)
-reddit_data["controversiality"] = np.where(reddit_data["controversiality"] > 0, True, False)
-reddit_data["body"] = pd.Series(reddit_data["body"], dtype=pd.StringDtype())
-reddit_data["created_utc"] = reddit_data["created_utc"].apply(lambda x:datetime.datetime.utcfromtimestamp(x) )
+dates = pd.read_csv(r"data_sets\dates.csv", parse_dates=[0,1,2,3], date_parser= lambda x: pd.to_datetime(x, format="mixed"))
 
-print(reddit_data["created_utc"].head(20))
-
-
-
-
+date_set1 = dates.iloc[:,0]
+date_set1 = pd.DataFrame({"year":date_set1.dt.year,
+                          "month":date_set1.dt.month,
+                          "day":date_set1.dt.day,
+                          "hour":date_set1.dt.hour,
+                          "dayofyear":date_set1.dt.dayofyear,
+                          "weekday":date_set1.dt.weekday,
+                          "quarter":date_set1.dt.quarter})
+print(date_set1)
