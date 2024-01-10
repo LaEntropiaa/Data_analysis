@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import os
 
-dates = pd.read_csv(r"data_sets\dates.csv", parse_dates=[0,1,2,3], date_parser= lambda x: pd.to_datetime(x, format="mixed"))
+titanic_data = pd.read_csv(r"data_sets\titanic_data.csv")
 
-date_set1 = dates.iloc[:,0]
-date_set1 = pd.DataFrame({"year":date_set1.dt.year,
-                          "month":date_set1.dt.month,
-                          "day":date_set1.dt.day,
-                          "hour":date_set1.dt.hour,
-                          "dayofyear":date_set1.dt.dayofyear,
-                          "weekday":date_set1.dt.weekday,
-                          "quarter":date_set1.dt.quarter})
-print(date_set1)
+cabin_data = titanic_data["Cabin"].astype(str)
+cabin_data = np.array([cabin[0] for cabin in cabin_data])
+titanic_data["Cabin"] = pd.Categorical(cabin_data)
+
+tab = pd.crosstab(index=titanic_data["Survived"], columns=titanic_data["Pclass"], margins=True, normalize="columns")
+tab.index = ["died", "survived"]
+tab.columns = ["class1", "class2", "class3", "Total"]
+
+print(tab)
