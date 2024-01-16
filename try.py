@@ -1,16 +1,41 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import os
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
-diamond_data = pd.read_csv(r"data_sets\diamonds.csv")
-del diamond_data["Unnamed: 0"]
-diamond_data["cut"] = diamond_data["cut"].map(
-    {"Ideal":5, "Premium":4, "Very Good":3, "Good":2, "Fair":1}
-    )
-diamond_data["clarity"] = diamond_data["clarity"].map(
-    {"IF":8, "VVS1":7, "VVS2":6, "VS1":5, "VS2":4, "SI1":3, "SI2":2, "I1":1}
-    )
+class LinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def append(self, data):
+        new_node = Node(data)
+        if self.head is None:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+    
+    def pre_append(self, data):
+        new_node = data
+        new_node.next = self.head
+        self.head = new_node
+    
+    def insert(data, index):
+        new_node = data
+        
 
-diamond_data["carat"].plot(kind="density")
-plt.show()
+    def show_values(self):
+        current_node = self.head
+        print("[", end="")
+        while current_node.next:
+            print(f"{current_node.data} -> ", end="")
+            current_node = current_node.next
+        print("None]")
+
+lista = LinkedList()
+lista.append(1)
+lista.append(2)
+lista.show_values()
+
