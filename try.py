@@ -4,8 +4,12 @@ class Node:
         self.next = None
 
 class LinkedList:
-    def __init__(self):
+    def __init__(self, data:list=None):
         self.head = None
+        self.index = 0
+        if data is not None:
+            for node in data:
+                self.append(node)
     
     def append(self, data):
         new_node = Node(data)
@@ -43,24 +47,77 @@ class LinkedList:
                 return None
             current_index += 1
         try:
-            return current_node.data
+            return current_node
         except AttributeError:
             return None
+    
+    def pop(self):
+        last_node = self.head.next.next
+        pre_node = self.head
+        while last_node is not None:
+            pre_node = pre_node.next
+            last_node = last_node.next
+        last_node = pre_node.next
+        pre_node.next = None
+        return last_node.data
 
-    def show_values(self):
+    def __len__(self):
+        length = 1
         current_node = self.head
-        print("[", end="")
+        while current_node.next is not None:
+            current_node = current_node.next
+            length += 1
+        return length
+
+    def __str__(self):
+        current_node = self.head
+        string = "["
         while True:
-            print(f"{current_node.data} -> ", end="")
+            string = f"{string} {current_node.data} ->"
             current_node = current_node.next
             if current_node.next is None:
-                print(f"{current_node.data} -> ", end="")
+                string = f"{string} {current_node.data} ->"
                 break
-        print("None]")
+        string = f"{string} None]"
+        return string
+    
+    def __getitem__(self, index):
+        current_node = self.head
+        current_index = 0
+        while index != current_index:
+            try:
+                current_node = current_node.next
+            except AttributeError:
+                raise IndexError("Index out of range")
+            current_index += 1
+        try:
+            return current_node.data
+        except AttributeError:
+            raise IndexError("Index out of range")
 
-lista = LinkedList()
-lista.append(1)
-lista.append(2)
-lista.append(3)
-print(lista.get(-1))
+    def __iter__(self):
+        return self
+     
+    def __next__(self):
+
+        if self.index < len(self):
+            data = self[self.index]
+            self.index += 1
+            return data
+        else:
+            self.index = 0
+            raise StopIteration
+    
+    def __delitem__(self, index):
+        self.get(index-1).next = self.get(index+1)
+    
+    def __setitem__(self, index, data):
+        new_node = Node(data)
+        new_node.next = self.get(index+1)
+        self.get(index-1).next = new_node
+
+mylist = LinkedList([1,2,3,4,5,6])
+print(mylist.pop(), "\n", mylist)
+
+
 
