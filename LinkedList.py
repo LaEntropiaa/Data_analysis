@@ -134,12 +134,22 @@ class LinkedList:
     def reverse(self):
         prev_node = None
         current_node = self.__head
-        while current_node:
+        while current_node is not None:
             next_node = current_node.next
             current_node.next = prev_node
             prev_node = current_node
             current_node = next_node
         self.__head = prev_node
+
+    def index(self, data):
+        current_node = self.__head
+        current_index = 0
+        while current_node is not None:
+            if current_node.data == data:
+                return current_index
+            current_node = current_node.next
+            current_index += 1
+        raise ValueError(f"{data} not in llist")
     
     def clear(self):
         self.__head = None
