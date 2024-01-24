@@ -1,4 +1,3 @@
-from Heap import MinHeap as mh
+from Heap import MinHeap as minh
+from Heap import MaxHeap as maxh
 
-a = mh([4,5,9,1,.5,3,10,11,12])
-print(a)
