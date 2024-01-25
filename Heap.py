@@ -28,9 +28,12 @@ class MinHeap:
         if len(self.heap) < 1:
             return 
         pop = self.heap[0]
-        self.heap[0] = self.heap.pop()
-        self.__sift_down()
-        return pop
+        try:
+            self.heap[0] = self.heap.pop()
+            self.__sift_down()
+            return pop
+        except IndexError:
+            return pop
     
     def replace(self, index:int, data=0):
         """
@@ -107,19 +110,19 @@ class MinHeap:
         level = 1
         nodes = 0
         for index in range(1,len(self.heap)):
-            string = f"{string} {self.heap[index]},"
+            string = f"{string}{self.heap[index]}, "
             nodes += 1
             if nodes >= 2**level:
                 level += 1
                 nodes = 0
                 string = f"{string}\n"
             if index + 2 >= len(self.heap):
-                string = f"{string} {self.heap[index+1]}"
+                string = f"{string}{self.heap[index+1]}"
                 return string
     def __len__(self):
         return len(self.heap)
 
-class MaxHeap:
+class MaxHeap(MinHeap):
     def __init__(self, data=None):
         self.heap = []
         if data is not None:
@@ -178,6 +181,9 @@ class MaxHeap:
         """
         return self.heap[0]
     
+    def __delete(self, index=0):
+        self.heap[index] = float("inf")
+
     def __sift_down(self, index=0):
         if index > len(self.heap)-1:
             return
@@ -225,16 +231,15 @@ class MaxHeap:
         level = 1
         nodes = 0
         for index in range(1,len(self.heap)):
-            string = f"{string} {self.heap[index]},"
+            string = f"{string}{self.heap[index]}, "
             nodes += 1
             if nodes >= 2**level:
                 level += 1
                 nodes = 0
                 string = f"{string}\n"
             if index + 2 >= len(self.heap):
-                string = f"{string} {self.heap[index+1]}"
+                string = f"{string}{self.heap[index+1]}"
                 return string
     def __len__(self):
         return len(self.heap)
-
                       
