@@ -1,8 +1,4 @@
-from Heap import MinHeap as mh
+import Hash
 
-a = mh([4,10,3,5,1])
-print(a)
-b = []
-for i in range(len(a)):
-    b.append(a.pop())
-print(b)
+var = Hash.Hash(20)
+print(len(var))

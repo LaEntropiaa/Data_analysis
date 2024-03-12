@@ -26,7 +26,7 @@ class LinkedList:
     
     def pre_append(self, data):
         """
-        Replaces the __head by a new node
+        Replaces the head by a new node
         """
         new_node = Node(data)
         new_node.next = self.__head

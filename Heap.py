@@ -37,7 +37,7 @@ class MinHeap:
     
     def replace(self, index:int, data=0):
         """
-        Replaces the value at the given inde xand adjusts the heap
+        Replaces the value at the given index and adjusts the heap
         """
         if len(self.heap) < 1:
             return 
@@ -53,15 +53,21 @@ class MinHeap:
             return 
         self.heap[index] = self.heap.pop()
         self.__sift_down(index)
+
+    def heapsort(self):
+        """
+        Returns the values of the heap as a sorted array
+        """
+        sorted_list = []
+        for i in self:
+            sorted_list.append(self.pop())
+        return sorted_list
     
     def peek(self):
         """
         Returns the min value
         """
         return self.heap[0]
-    
-    def __delete(self, index=0):
-        self.heap[index] = float("inf")
 
     def __sift_down(self, index=0):
         if index > len(self.heap)-1:
@@ -104,6 +110,17 @@ class MinHeap:
                 parent = round((index-1) / 2)
             else:
                 parent = int((index-2) / 2)
+
+    def __iter__(self):
+        self.current_index = len(self.heap)
+        return self
+    
+    def __next__(self):
+        if self.current_index > 0:
+            self.current_index -= 1
+            return self.heap[self.current_index]
+        else:
+            raise StopIteration
     
     def __str__(self):
         string = f"{self.heap[0]}\n"
@@ -152,9 +169,12 @@ class MaxHeap(MinHeap):
         if len(self.heap) < 1:
             return 
         pop = self.heap[0]
-        self.heap[0] = self.heap.pop()
-        self.__sift_down()
-        return pop
+        try:
+            self.heap[0] = self.heap.pop()
+            self.__sift_down()
+            return pop
+        except IndexError:
+            return pop
     
     def replace(self, index:int, data=0):
         """
@@ -226,6 +246,17 @@ class MaxHeap(MinHeap):
             else:
                 parent = int((index-2) / 2)
     
+    def __iter__(self):
+        self.current_index = len(self.heap)
+        return self
+    
+    def __next__(self):
+        if self.current_index > 0:
+            self.current_index -= 1
+            return self.heap[self.current_index]
+        else:
+            raise StopIteration
+
     def __str__(self):
         string = f"{self.heap[0]}\n"
         level = 1
