@@ -15,7 +15,27 @@ class Hash:
             string = f"{string} {i[0]}:{i[1]},"
         string = f"{string[:-1]} {'}'}"
         return string
-        
+    
+    def __setitem__(self, key, data):
+        if self.items >= self.size:
+            raise KeyError("HashTable out of space")
+        position = self.__hash(key)
+        while self.array[position] is not None:
+            if self.array[position][0] == key:
+                self.array[position][1] = data
+                return
+            position = (position + 1) % self.size
+        self.array[position] = (key, data)
+        self.items += 1
+
+    def __getitem__(self, key):
+        position = self.__hash(key)
+        while self.array[position] is not None:
+            if self.array[position][0] == key:
+                return self.array[position][1]
+            position = (position + 1) % self.size
+        raise KeyError("Key not found")
+
     def __hash(self, key) -> int:
         key = hash(key)
         position = round(self.size * ((key * self.__C) % 1))
