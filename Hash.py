@@ -31,11 +31,21 @@ class Hash:
                 return
             position = (position + 1) % self.size
         self.array[position] = (key, data)
+        self.items += 1
     
     def get(self, key):
         position = self.__hash(key)
         while self.array[position] is not None:
             if self.array[position][0] == key:
                 return self.array[position][1]
+            position = (position + 1) % self.size
+        raise KeyError("Key not found")
+
+    def delete(self, key):
+        position = self.__hash(key)
+        while self.array[position] is not None:
+            if self.array[position][0] == key:
+                self.array[position] = None
+                return
             position = (position + 1) % self.size
         raise KeyError("Key not found")
