@@ -5,7 +5,7 @@ class Hash:
     def __init__(self, size:int):
         self.size = size
         self.array = [None for _ in range(self.size)]
-        self.items = 0
+        self.objects = 0
 
     def __str__(self):
         string = "{"
@@ -17,7 +17,7 @@ class Hash:
         return string
     
     def __setitem__(self, key, data):
-        if self.items >= self.size:
+        if self.objects >= self.size:
             raise KeyError("HashTable out of space")
         position = self.__hash(key)
         while self.array[position] is not None:
@@ -26,7 +26,7 @@ class Hash:
                 return
             position = (position + 1) % self.size
         self.array[position] = (key, data)
-        self.items += 1
+        self.objects += 1
 
     def __getitem__(self, key):
         position = self.__hash(key)
@@ -42,7 +42,7 @@ class Hash:
         return position        
 
     def add(self, data, key) -> None:
-        if self.items >= self.size:
+        if self.objects >= self.size:
             raise KeyError("HashTable out of space")
         position = self.__hash(key)
         while self.array[position] is not None:
@@ -51,7 +51,7 @@ class Hash:
                 return
             position = (position + 1) % self.size
         self.array[position] = (key, data)
-        self.items += 1
+        self.objects += 1
     
     def get(self, key):
         position = self.__hash(key)
@@ -66,6 +66,7 @@ class Hash:
         while self.array[position] is not None and position < self.size:
             if self.array[position][0] == key:
                 self.array[position] = None
+                self.objects -= 1
                 return
             position = (position + 1) % self.size
         raise KeyError("Key not found")
@@ -85,4 +86,25 @@ class Hash:
                 return position
             position += 1
         return -1
-         
+    
+    def keys(self) -> list:
+        keys = []
+        for key in self.array:
+            if key is not None:
+                keys.append(key[0])
+        return keys
+    
+    def values(self) -> list:
+        values = []
+        for value in self.array:
+            if value is not None:
+                values.append(value[1])
+        return values
+
+    def items(self) -> list:
+        items = []         
+        for item in self.array:
+            if item is not None:
+                items.append(item)
+        return items
+        
