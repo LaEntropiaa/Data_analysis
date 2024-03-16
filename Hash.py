@@ -61,11 +61,28 @@ class Hash:
             position = (position + 1) % self.size
         raise KeyError("Key not found")
 
-    def delete(self, key):
+    def delete(self, key) -> None:
         position = self.__hash(key)
-        while self.array[position] is not None:
+        while self.array[position] is not None and position < self.size:
             if self.array[position][0] == key:
                 self.array[position] = None
                 return
             position = (position + 1) % self.size
         raise KeyError("Key not found")
+
+    def search_k(self, key) -> int:
+        position = self.__hash(key)
+        while self.array[position] is not None and position < self.size:
+            if self.array[position][0] == key:
+                return position
+            position = (position + 1) % self.size
+        return -1
+    
+    def search_v(self, data):
+        position = 0
+        while self.array[position] is not None and position < self.size:
+            if self.array[position][1] == data:
+                return position
+            position += 1
+        return -1
+         
