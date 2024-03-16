@@ -1,8 +1,6 @@
 import Hash
 
-var = Hash.Hash(40)
-var.add(28, "culo")
-var.add(68, "cerro")
-var.add(24, "vargas")
-var.add(29, "hiperbole")
-print(var.keys())
+di = {"hola":56, "culon":44, "versa":45, "iguana":12}
+var = Hash.Hash(4,di)
+
+print(var)

@@ -2,10 +2,15 @@ import math
 
 class Hash:
     __C = 1 / (1 + math.sqrt(5) / 2)
-    def __init__(self, size:int):
+    def __init__(self, size:int, data:dict = None):
         self.size = size
-        self.array = [None for _ in range(self.size)]
         self.objects = 0
+        self.array = [None for _ in range(self.size)]
+        if data is not None:
+            if self.size < len(data):
+                self.size = len(data)
+            for item in data.items():
+                self.add(item[1], item[0])
 
     def __str__(self):
         string = "{"
@@ -107,4 +112,17 @@ class Hash:
             if item is not None:
                 items.append(item)
         return items
+    
+    def clear(self) -> None:
+        self.array = []
+
+    def resize(self, size) -> None:
+        objects = self.items()
+        if len(objects) > size:
+            raise RuntimeError("New hashtable size unsuficient for its items")
+        self.size = size
+        self.clear()
+        items = 1
+        for item in objects:
+            self.add()
         
