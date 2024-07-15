@@ -115,14 +115,6 @@ class Hash:
     
     def clear(self) -> None:
         self.array = []
+        self.objects = 0
 
-    def resize(self, size) -> None:
-        objects = self.items()
-        if len(objects) > size:
-            raise RuntimeError("New hashtable size unsuficient for its items")
-        self.size = size
-        self.clear()
-        items = 1
-        for item in objects:
-            self.add()
         

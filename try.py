@@ -1,6 +1,7 @@
-import Hash
 
-di = {"hola":56, "culon":44, "versa":45, "iguana":12}
-var = Hash.Hash(4,di)
+def main(var:type):
+    if isinstance(var, type):
+        print("hi")
 
-print(var)
+var = int
+main(var)
