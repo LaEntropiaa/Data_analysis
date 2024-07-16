@@ -155,7 +155,7 @@ class LinkedList:
         self.__head = None
         
     def __len__(self):
-        length = 1
+        length = 0
         current_node = self.__head
         while current_node.next is not None:
             current_node = current_node.next
