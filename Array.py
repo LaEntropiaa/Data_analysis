@@ -3,7 +3,9 @@ class Array:
         self.size:int = size
         self.dtype:type = dtype
         self.items = []
-        #Fill the list with None's so there is no conflict with the insert or other methods like that
+        self.value_count = 0
+        #Fill the list with None's so there is no conflict with the 
+        #insert or other methods like that
         for i in range(size):
             self.items.append(None)
         if not isinstance(self.dtype, type):
@@ -23,11 +25,12 @@ class Array:
         """
         if not self.__is_valid_type(value):
             raise TypeError("Value given is not of a valid type")
-        if len(self.items) >= self.size():
+        if self.value_count >= self.size():
             raise RuntimeError("Size of the array is unsufficient")
         for i in range(self.size, 0, -1):
             if self.items[i] is not None:
                 self.items[i + 1] = value
+                self.value_count += 1
                 return
         self.items[0] = value
         
@@ -40,6 +43,8 @@ class Array:
             raise TypeError("Value given is not of a valid type")
         if index > self.size - 1:
             raise IndexError("Index given is out of range")
+        if self.items[index] is None:
+            self.value_count += 1
         self.items[index] = value
 
     def pop(self) :
@@ -51,6 +56,7 @@ class Array:
                 temporal = self.items[i]
                 self.items[i] = None
                 return temporal
+        self.value_count -= 1
         return None
 
     def remove(self, index:int) -> None:
@@ -59,6 +65,7 @@ class Array:
         """ 
         if index > self.size - 1:
             raise IndexError("Index given is out of range")
+        self.value_count -= 1
         self.items[index] = None
 
     def index(self, value) -> int:
@@ -99,17 +106,23 @@ class Array:
         """
         self.items.reverse()
 
+    def longest_str_size(self) -> int:
+        """
+        Returns the string size of the value with the longest string
+        """
+        num = 0
+        for i in self.items:
+            if len(str(i)) > num:
+                num = len(str(i))
+        return num
+
     def __is_valid_type(self, data) -> bool:
         if isinstance(data, self.dtype):
             return True
         return False
     
     def __len__(self):
-        count = 0
-        for i in self.items:
-            if i is not None:
-                count = count + 1
-        return count
+        return len(self.items)
     
     def __str__(self):
         return str(self.items)
@@ -124,12 +137,15 @@ class Array:
             raise TypeError("Value given is not of a valid type")
         if index > self.size - 1:
             raise IndexError("Index given is out of range")
+        if self.items[index] is None:
+            self.value_count += 1
         self.items[index] = value
     
     def __delitem__(self, index):
         if index > self.size - 1:
             raise IndexError("Index given is out of range")
+        self.value_count -= 1
         self.items[index] = None
     
     def __iter__(self):
-        return self.items
+        return self.items.__iter__()
