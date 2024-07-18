@@ -3,6 +3,7 @@ from Array import Array as arr
 class Matrix:
     def __init__(self, dtype:type, rows:int = 1, columns:int = 1) -> None:
         self.matrix = arr(arr, rows)
+        self.dtype = dtype
         for i in range(rows):
             self.matrix[i] = arr(dtype, columns)
 
@@ -11,6 +12,26 @@ class Matrix:
         Returns the size of the matrix as a tuple
         """
         return (len(self.matrix), len(self.matrix[1]))
+    
+    def set_item(self, value, row:int, column:int) -> None:
+        """
+        Sets the value of a certain item
+        """
+        if not self.__is_valid_type(value):
+            raise TypeError("The value given is not of the correct type")
+        try:
+            self.matrix[row][column] = value
+        except IndexError:
+            raise IndexError("Row or column is out of matrix range")
+        
+    def get_item(self, row:int, column):
+        """
+        Returns the value at the given index
+        """
+        try:
+            return self.matrix[row][column]
+        except IndexError:
+            raise IndexError("Row or column is out of matrix range")
 
     def longest_str_size(self) -> int:
         """
@@ -24,6 +45,11 @@ class Matrix:
             if i > num:
                 num = i
         return num
+    
+    def __is_valid_type(self, value) -> bool:
+        if isinstance(value, self.dtype):
+            return True
+        return False
     
     def __repr__(self) -> str:
         string = "Matrix: ["
@@ -48,6 +74,50 @@ class Matrix:
             string = f"{string}\n"
         return string
 
-        
-
+    def __add__(self, other):
+        if self.shape() != other.shape():
+            raise ValueError(
+                "Matrix does not support adding 2 different size matrix"
+                )
+        new_matrix = Matrix(self.dtype, self.shape()[0], self.shape()[1])
+        keys = [
+            (i, k) 
+            for i in range(self.shape()[0]) 
+            for k in range(self.shape()[1])
+            ]
+        for i, k in keys:
+            if self.get_item(i, k) == None or other.get_item(i, k) == None:
+                continue
+            # Sorry for the indentation
+            try:
+                value = self.get_item(i, k) + other.get_item(i, k)
+                new_matrix.set_item(value, i, k)
+            except TypeError:
+                raise TypeError(
+                    "The data type in the matrix does not support addition"
+                )
+        return new_matrix
     
+    def __sub__(self, other):
+        if self.shape() != other.shape():
+            raise ValueError(
+                "Matrix does not support substracting 2 different size matrix"
+            )
+        new_matrix = Matrix(self.dtype, self.shape()[0], self.shape()[1])
+        keys = [
+            (i, k) 
+            for i in range(self.shape()[0]) 
+            for k in range(self.shape()[1])
+            ]
+        for i, k in keys:
+            if self.get_item(i, k) == None or other.get_item(i, k) == None:
+                continue
+            try:
+                value = self.get_item(i, k) - other.get_item(i, k)
+                new_matrix.set_item(value, i, k)
+            except TypeError:
+                raise TypeError(
+                    "The data type in the matrix does not support substraction"
+                    )
+        return new_matrix
+
