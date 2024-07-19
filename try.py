@@ -8,4 +8,7 @@ matriz2.fill(3)
 
 matriz1 = matriz1 * matriz2
 
-print(matriz1.matrix[4])
+matriz1.set_item(8, 2, 1)
+
+
+print(matriz1.get_transpose())

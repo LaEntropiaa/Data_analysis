@@ -52,6 +52,20 @@ class Matrix:
             row_list.append(i[column])
         return row_list
 
+    def get_transpose(self):
+        """
+        Returns a diagonaly fliped version of the matrix
+        """
+        new_matrix = Matrix(self.dtype, self.shape()[1], self.shape()[0])
+        keys = [
+            (i, k) 
+            for i in range(self.shape()[0]) 
+            for k in range(self.shape()[1])
+            ]
+        for i, k in keys:
+            new_matrix.set_item(self.get_item(i, k), k, i)
+        return new_matrix
+
     def longest_str_size(self) -> int:
         """
         Returns the string size of the value with the longest string
@@ -100,10 +114,10 @@ class Matrix:
         # (makes every value take the same space)
         minimal_space:int = self.longest_str_size()
         string = ""
-        for i in range(self.shape()[0] + 1):
+        for i in range(self.shape()[0]):
             row = self.get_row(i)
             for k in row:
-                space = " " * (len(str(k)) - minimal_space + 4)
+                space = " " * (minimal_space - len(str(k)) + 4)
                 string = f"{string}{k}{space}"
             string = f"{string}\n"
         return string
