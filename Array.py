@@ -115,6 +115,12 @@ class Array:
             if len(str(i)) > num:
                 num = len(str(i))
         return num
+    
+    def to_list(self) -> list:
+        """
+        Returns the array as a list
+        """
+        return self.items
 
     def __is_valid_type(self, data) -> bool:
         if isinstance(data, self.dtype):

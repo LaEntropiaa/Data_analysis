@@ -3,7 +3,7 @@ from Array import Array as arr
 class Matrix:
     def __init__(self, dtype:type, rows:int = 1, columns:int = 1) -> None:
         self.matrix = arr(arr, rows)
-        self.dtype = dtype
+        self.dtype = dtype 
         for i in range(rows):
             self.matrix[i] = arr(dtype, columns)
 
@@ -11,7 +11,7 @@ class Matrix:
         """
         Returns the size of the matrix as a tuple
         """
-        return (len(self.matrix), len(self.matrix[1]))
+        return (len(self.matrix), len(self.matrix[0]) )
     
     def set_item(self, value, row:int, column:int) -> None:
         """
@@ -24,7 +24,7 @@ class Matrix:
         except IndexError:
             raise IndexError("Row or column is out of matrix range")
         
-    def get_item(self, row:int, column):
+    def get_item(self, row:int, column:int):
         """
         Returns the value at the given index
         """
@@ -32,6 +32,25 @@ class Matrix:
             return self.matrix[row][column]
         except IndexError:
             raise IndexError("Row or column is out of matrix range")
+        
+    def get_row(self, row:int) -> list:
+        """
+        Returns the row a a list
+        """
+        if row > self.shape()[0] - 1:
+            raise IndexError("Column index out of range")
+        return self.matrix[row].to_list()
+
+    def get_column(self, column:int) -> list:
+        """
+        Returns the column as a list
+        """
+        if column > self.shape()[1] - 1:
+            raise IndexError("Row index out of range")
+        row_list = []
+        for i in self.matrix:
+            row_list.append(i[column])
+        return row_list
 
     def longest_str_size(self) -> int:
         """
@@ -67,10 +86,11 @@ class Matrix:
         # (makes every value take the same space)
         minimal_space:int = self.longest_str_size()
         string = ""
-        for i in range(self.matrix.size):
-            for k in range(self.matrix[i].size):
-                space = " " * (len(str(self.matrix[i][k])) - minimal_space + 4)
-                string = f"{string}{self.matrix[i][k]}{space}"
+        for i in range(self.shape()[0] + 1):
+            row = self.get_row(i)
+            for k in row:
+                space = " " * (len(str(k)) - minimal_space + 4)
+                string = f"{string}{k}{space}"
             string = f"{string}\n"
         return string
 
@@ -120,4 +140,11 @@ class Matrix:
                     "The data type in the matrix does not support substraction"
                     )
         return new_matrix
+    
+    def __mul__(self, other):
+        if self.shape()[1] != other.shape()[0]:
+            raise ValueError(
+                "Columns of matrix A are different from rows of matrix B"
+            )
+        new_matrix = Matrix(self.dtype, self.shape()[0], other.shape()[1])
 
