@@ -65,6 +65,20 @@ class Matrix:
                 num = i
         return num
     
+    def fill(self, value) -> None:
+        """
+        Fills the whole matrix with certain value
+        """
+        if not self.__is_valid_type(value):
+            raise TypeError("The value given is not of the correct type")
+        keys = [
+            (i, k) 
+            for i in range(self.shape()[0]) 
+            for k in range(self.shape()[1])
+            ]
+        for i, k in keys:
+            self.set_item(value, i, k)
+    
     def __is_valid_type(self, value) -> bool:
         if isinstance(value, self.dtype):
             return True
@@ -147,4 +161,15 @@ class Matrix:
                 "Columns of matrix A are different from rows of matrix B"
             )
         new_matrix = Matrix(self.dtype, self.shape()[0], other.shape()[1])
+        keys = [
+            (i, k)
+            for i in range(self.shape()[0])
+            for k in range(other.shape()[1])
+        ]
+        for i, k in keys:
+            row = self.get_row(i)
+            column = other.get_column(k)
+            value = sum(a * b for a, b in zip(row, column))
+            new_matrix.set_item(value, i, k)
+        return new_matrix
 
