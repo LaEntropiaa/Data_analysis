@@ -12,4 +12,5 @@ matriz1.set_item(4, 2, 0)
 matriz1.set_item(60, 2, 1)
 matriz1.set_item(10, 2, 2)
 
-print(matriz1.get_3x3_determinant())
+print(matriz1)
+print(matriz1.get_minor(1,1))

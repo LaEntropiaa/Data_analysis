@@ -66,6 +66,30 @@ class Matrix:
             new_matrix.set_item(self.get_item(i, k), k, i)
         return new_matrix
     
+    def get_minor(self, row:int, column:int):
+        """
+        Returns the minor of a given value
+        """
+        new_matrix = Matrix(self.dtype, self.shape()[0] - 1, self.shape()[1] - 1)
+        self_values = []
+        other_keys = [
+            (i, k) 
+            for i in range(new_matrix.shape()[0]) 
+            for k in range(new_matrix.shape()[1])
+            ]
+        for i in range(self.shape()[0]):
+            for k in range(self.shape()[1]):
+                if i == row or k == row:
+                    continue
+                self_values.append(self.get_item(i, k))
+        value_count = 0
+        for i, k in other_keys:
+            new_matrix.set_item(self_values[value_count], i, k)
+            value_count += 1
+        return new_matrix
+        
+            
+
     def get_2x2_determinant(self) -> int:
         if self.shape()[0] != 2 and self.shape()[1]:
             raise ValueError("Matrix dimentions are wrong")
@@ -79,7 +103,13 @@ class Matrix:
         c = self.get_item(0, 2) * ((self.get_item(1, 0) * self.get_item(2, 1)) - (self.get_item(1, 1) * self.get_item(2, 0)))
         return a - b + c
 
-    
+    def get_nxn_determinant(self) -> int:
+        """
+        Returns the determinant of a square
+        """
+        if self.shape()[0] != self.shpe()[1]:
+            raise ValueError("Matrix has to be squared")
+        
 
     def longest_str_size(self) -> int:
         """
