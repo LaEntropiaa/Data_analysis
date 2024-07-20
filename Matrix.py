@@ -65,6 +65,21 @@ class Matrix:
         for i, k in keys:
             new_matrix.set_item(self.get_item(i, k), k, i)
         return new_matrix
+    
+    def get_2x2_determinant(self) -> int:
+        if self.shape()[0] != 2 and self.shape()[1]:
+            raise ValueError("Matrix dimentions are wrong")
+        return (self.get_item(0, 0) * self.get_item(1, 1)) - (self.get_item(0,1) * self.get_item(1, 0))
+        
+    def get_3x3_determinant(self) -> int:
+        if self.shape()[0] != 3 and self.shape()[1]:
+            raise ValueError("Matrix dimentions are wrong")
+        a = self.get_item(0, 0) * ((self.get_item(1, 1) * self.get_item(2, 2)) - (self.get_item(1, 2) * self.get_item(2, 1)))
+        b = self.get_item(0, 1) * ((self.get_item(1, 0) * self.get_item(2, 2)) - (self.get_item(1, 2) * self.get_item(2, 0)))
+        c = self.get_item(0, 2) * ((self.get_item(1, 0) * self.get_item(2, 1)) - (self.get_item(1, 1) * self.get_item(2, 0)))
+        return a - b + c
+
+    
 
     def longest_str_size(self) -> int:
         """
