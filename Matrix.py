@@ -79,7 +79,7 @@ class Matrix:
             ]
         for i in range(self.shape()[0]):
             for k in range(self.shape()[1]):
-                if i == row or k == row:
+                if i == row or k == column:
                     continue
                 self_values.append(self.get_item(i, k))
         value_count = 0
@@ -107,8 +107,22 @@ class Matrix:
         """
         Returns the determinant of a square
         """
-        if self.shape()[0] != self.shpe()[1]:
+        value = 0
+        if self.shape()[0] != self.shape()[1]:
             raise ValueError("Matrix has to be squared")
+        if self.shape()[0] == 1:
+            return self.get_item(0, 0)
+        if self.shape()[0] == 2:
+            return self.get_2x2_determinant()
+        if self.shape()[0] == 3:
+            return self.get_3x3_determinant()
+        for i in range(len(self.get_row(0))):
+            if (2 + i) % 2 == 0:
+                determinant_sign = 1
+            else:
+                determinant_sign = -1
+            value += self.get_item(0, i) * (determinant_sign * self.get_minor(0, i).get_nxn_determinant())
+        return value
         
 
     def longest_str_size(self) -> int:
