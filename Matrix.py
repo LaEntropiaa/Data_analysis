@@ -123,6 +123,25 @@ class Matrix:
         return value
         
 
+    def get_adjoint(self):
+        """
+        Return the adjoint of the matrix as a Matrix
+        """
+        new_matrix = Matrix(self.shape()[0], self.shape()[1])
+        keys = [
+            (i, k)
+            for i in range(self.shape()[0])
+            for k in range(self.shape()[1])
+        ]
+        for i, k in keys:
+            if (i + k + 2) % 2 == 0:
+                sign = 1
+            else:
+                sign = -1
+            value = sign * self.get_minor(i, k).get_nxn_determinant()
+            new_matrix.set_item(value, i, k)
+        return new_matrix
+
     def longest_str_size(self) -> int:
         """
         Returns the string size of the value with the longest string
