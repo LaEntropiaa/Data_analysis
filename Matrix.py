@@ -1,11 +1,13 @@
 from Array import Array as arr
 
 class Matrix:
-    def __init__(self, dtype:type, rows:int = 1, columns:int = 1) -> None:
-        self.matrix = arr(arr, rows)
-        self.dtype = dtype 
+    def __init__(self, rows:int = 1, columns:int = 1) -> None:
+        self.matrix = []
         for i in range(rows):
-            self.matrix[i] = arr(dtype, columns)
+            temp = []
+            for k in range(columns):
+                temp.append(0)
+            self.matrix.append(temp)
 
     def shape(self) -> tuple:
         """
@@ -17,8 +19,6 @@ class Matrix:
         """
         Sets the value of a certain item
         """
-        if not self.__is_valid_type(value):
-            raise TypeError("The value given is not of the correct type")
         try:
             self.matrix[row][column] = value
         except IndexError:
@@ -39,7 +39,7 @@ class Matrix:
         """
         if row > self.shape()[0] - 1:
             raise IndexError("Column index out of range")
-        return self.matrix[row].to_list()
+        return self.matrix[row]
 
     def get_column(self, column:int) -> list:
         """
@@ -56,7 +56,7 @@ class Matrix:
         """
         Returns a diagonaly fliped version of the matrix
         """
-        new_matrix = Matrix(self.dtype, self.shape()[1], self.shape()[0])
+        new_matrix = Matrix(self.shape()[1], self.shape()[0])
         keys = [
             (i, k) 
             for i in range(self.shape()[0]) 
@@ -70,7 +70,7 @@ class Matrix:
         """
         Returns the minor of a given value
         """
-        new_matrix = Matrix(self.dtype, self.shape()[0] - 1, self.shape()[1] - 1)
+        new_matrix = Matrix(self.shape()[0] - 1, self.shape()[1] - 1)
         self_values = []
         other_keys = [
             (i, k) 
@@ -87,8 +87,6 @@ class Matrix:
             new_matrix.set_item(self_values[value_count], i, k)
             value_count += 1
         return new_matrix
-        
-            
 
     def get_2x2_determinant(self) -> int:
         if self.shape()[0] != 2 and self.shape()[1]:
@@ -129,21 +127,18 @@ class Matrix:
         """
         Returns the string size of the value with the longest string
         """
-        highest_values = []
+        highest_value = []
         for i in self.matrix:
-            highest_values.append(i.longest_str_size())
-        num:int = highest_values[0]
-        for i in highest_values:
-            if i > num:
-                num = i
-        return num
+            temp = []
+            for k in i:
+                temp.append(len(str(k)))
+            highest_value.append(max(temp))
+        return max(highest_value)
     
     def fill(self, value) -> None:
         """
         Fills the whole matrix with certain value
         """
-        if not self.__is_valid_type(value):
-            raise TypeError("The value given is not of the correct type")
         keys = [
             (i, k) 
             for i in range(self.shape()[0]) 
@@ -175,18 +170,18 @@ class Matrix:
         string = ""
         for i in range(self.shape()[0]):
             row = self.get_row(i)
-            for k in row:
-                space = " " * (minimal_space - len(str(k)) + 4)
-                string = f"{string}{k}{space}"
+            for value in row:
+                space = " " * (minimal_space - (len(str(value))) + 4)
+                string = f"{string}{value}{space}"
             string = f"{string}\n"
-        return string
+        return string 
 
     def __add__(self, other):
         if self.shape() != other.shape():
             raise ValueError(
                 "Matrix does not support adding 2 different size matrix"
                 )
-        new_matrix = Matrix(self.dtype, self.shape()[0], self.shape()[1])
+        new_matrix = Matrix(self.shape()[0], self.shape()[1])
         keys = [
             (i, k) 
             for i in range(self.shape()[0]) 
@@ -210,7 +205,7 @@ class Matrix:
             raise ValueError(
                 "Matrix does not support substracting 2 different size matrix"
             )
-        new_matrix = Matrix(self.dtype, self.shape()[0], self.shape()[1])
+        new_matrix = Matrix(self.shape()[0], self.shape()[1])
         keys = [
             (i, k) 
             for i in range(self.shape()[0]) 
@@ -233,7 +228,7 @@ class Matrix:
             raise ValueError(
                 "Columns of matrix A are different from rows of matrix B"
             )
-        new_matrix = Matrix(self.dtype, self.shape()[0], other.shape()[1])
+        new_matrix = Matrix(self.shape()[0], other.shape()[1])
         keys = [
             (i, k)
             for i in range(self.shape()[0])
