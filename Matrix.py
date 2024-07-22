@@ -141,6 +141,21 @@ class Matrix:
             value = sign * self.get_minor(i, k).get_nxn_determinant()
             new_matrix.set_item(value, i, k)
         return new_matrix
+    
+    def get_inverse(self):
+        """
+        Return the inverse of the matrix as a Matrix
+        """
+        new_matrix = self.get_adjoint().get_transpose()
+        keys = [
+            (i, k)
+            for i in range(self.shape()[0])
+            for k in range(self.shape()[1])
+        ]
+        for i, k in keys:
+            value = new_matrix.get_item(i, k) / self.get_nxn_determinant()
+            new_matrix.set_item(value, i, k)
+        return new_matrix
 
     def longest_str_size(self) -> int:
         """

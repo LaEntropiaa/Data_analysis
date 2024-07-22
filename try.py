@@ -16,4 +16,4 @@ matriz1.set_item(-1, 2, 2)
 
 print(matriz1)
 print()
-print(matriz1.get_adjoint())
+print(matriz1.get_inverse() * matriz1)
